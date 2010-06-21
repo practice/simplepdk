@@ -1,6 +1,8 @@
 package com.bpnr.portal.devtools.actions;
 
 public class DeploymentException extends Exception {
+
+	private static final long serialVersionUID = -3308151972522452910L;
 	private String m_response;
 	private String m_targetComponent;
 	private DeployEngine m_engine;

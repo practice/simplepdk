@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class FileNotExistException extends IOException {
+
+	private static final long serialVersionUID = 2696798500204814991L;
 	private File file;
 	private String[] segmentsInProject;
 	private Object project;

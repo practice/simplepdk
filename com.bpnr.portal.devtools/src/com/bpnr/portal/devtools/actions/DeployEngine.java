@@ -17,6 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
 
+import com.bpnr.portal.devtools.PdkToolsLog;
 import com.bpnr.portal.devtools.RememberServerPassword;
 import com.bpnr.portal.devtools.preferences.PortalServer;
 
@@ -69,11 +70,6 @@ public class DeployEngine {
 	public void deploy(File parFile) throws IOException, DeploymentException {
 		uploadPar(parFile);
 	}
-
-//	private String getComponetName(File parFile) {
-//		String componentName = parFile.getName();
-//		return componentName.substring(0, componentName.lastIndexOf('.'));
-//	}
 
 	private URL createURL(String irjPath) throws MalformedURLException {
 		String urlstr = "http://" + this.m_hostName + ":" + this.m_port + "/" + irjPath + "?login_submit=on&j_user=" + this.m_userName + "&j_password=" + this.m_password
@@ -142,25 +138,6 @@ public class DeployEngine {
 		return new String(response);
 	}
 
-//	private void removePar(String componentName) throws IOException, DeploymentException {
-//		URLConnection con = openConnection("irj/servlet/prt/portal/prteventname/delete/prtroot/com.sap.portal.runtime.system.console.ArchiveRemover");
-//		OutputStream out = con.getOutputStream();
-//
-//		out.write(("parname=" + componentName).getBytes());
-//		out.flush();
-//		out.close();
-//
-//		String response = readResponse(con);
-//
-//		if (this.m_isVerbose) {
-//			System.out.println(response);
-//		}
-//
-//		if ((this.m_deleteMode != DELETE_FAIL_ERROR) || (response.indexOf("been successfully removed from the PCD") != -1))
-//			return;
-//		throw new DeploymentException("Remove seems to have failed", componentName, response, this);
-//	}
-
 	private void uploadPar(File parFile) throws IOException, DeploymentException {
 		byte[] fileBytes = readFile(parFile);
 		byte[] prefix = createUploadPrefix(parFile);
@@ -205,7 +182,7 @@ public class DeployEngine {
 				socket = new Socket(address, port);
 				socket.setSoTimeout(10000);
 			} catch (IOException ioe) {
-//				SapPortalPluginsLogger.logError(this, ioe);
+				PdkToolsLog.logError(ioe);
 				return false;
 			}
 
@@ -219,10 +196,11 @@ public class DeployEngine {
 					e.printStackTrace();
 					try {
 						istream.close();
-						ostream.close();
+						if (ostream != null)
+							ostream.close();
 						socket.close();
 					} catch (IOException ioe) {
-//						SapPortalPluginsLogger.logError(this, ioe);
+						PdkToolsLog.logError(ioe);
 					}
 
 					return false;
@@ -237,26 +215,25 @@ public class DeployEngine {
 					inbound.readLine();
 					try {
 						istream.close();
-						ostream.close();
+						if (ostream != null)
+							ostream.close();
 						socket.close();
 						return true;
 					} catch (IOException ioe) {
-//						SapPortalPluginsLogger.logError(this, ioe);
-
+						PdkToolsLog.logError(ioe);
 						return true;
 					}
 				} catch (InterruptedIOException e2) {
 					return false;
 				} catch (IOException ioe) {
-//					SapPortalPluginsLogger.logError(this, ioe);
+					PdkToolsLog.logError(ioe);
 					try {
 						istream.close();
 						ostream.close();
 						socket.close();
 					} catch (IOException ioe2) {
-//						SapPortalPluginsLogger.logError(this, ioe2);
+						PdkToolsLog.logError(ioe2);
 					}
-
 					return false;
 				}
 			}
