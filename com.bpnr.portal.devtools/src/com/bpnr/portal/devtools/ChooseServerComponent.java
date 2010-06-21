@@ -44,17 +44,16 @@ import com.bpnr.portal.devtools.preferences.SapPortalPreferencePage;
 
 public class ChooseServerComponent {
 
-	private Composite mm_container;
-	private Group mm_group;
-	private Table mm_table;
+	private Composite container;
+	private Group group;
+	private Table table;
 	private static int PASSWD_COL = 2;
-	private Button mm_buttonAdvanced;
-	private Label mm_serverDetails;
-	private TableViewer mm_tviewer;
-	private TableContentProvider mm_cp;
+	private Button buttonAdvanced;
+	private Label serverDetails;
+	private TableViewer tableViewer;
 
 	public ChooseServerComponent(Composite container) {
-		this.mm_container = container;
+		this.container = container;
 
 		createTable();
 		addListeners();
@@ -67,42 +66,39 @@ public class ChooseServerComponent {
 	}
 
 	private void createTable() {
-		this.mm_group = new Group(this.mm_container, 32);
-		this.mm_group.setText("Servers");
-		this.mm_group.setLayout(new GridLayout());
-		this.mm_group.setLayoutData(new GridData(1808));
+		this.group = new Group(this.container, 32);
+		this.group.setText("Servers");
+		this.group.setLayout(new GridLayout());
 
-//		int style = 67588;
-		this.mm_table = new Table(this.mm_group, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		this.table = new Table(this.group, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 120;
-		this.mm_table.setLayoutData(gd);
+		this.table.setLayoutData(gd);
 
-		this.mm_tviewer = new TableViewer(this.mm_table);
-		this.mm_cp = new TableContentProvider();
-		this.mm_tviewer.setContentProvider(this.mm_cp);
-		this.mm_tviewer.setLabelProvider(new TableLabelProvider());
+		this.tableViewer = new TableViewer(this.table);
+		this.tableViewer.setContentProvider(new TableContentProvider());
+		this.tableViewer.setLabelProvider(new TableLabelProvider());
 	}
 
 	private void addListeners() {
-		final TableEditor editor = new TableEditor(this.mm_table);
+		final TableEditor editor = new TableEditor(this.table);
 
-		this.mm_table.addListener(3, new Listener() {
+		this.table.addListener(3, new Listener() {
 
 			public void handleEvent(Event event) {
-				Rectangle clientArea = mm_table.getClientArea();
+				Rectangle clientArea = table.getClientArea();
 				Point pt = new Point(event.x, event.y);
-				TableItem[] selectedItems = mm_table.getSelection();
+				TableItem[] selectedItems = table.getSelection();
 				if ((selectedItems == null) || (selectedItems.length != 1)) {
 					return;
 				}
-				int selectedIndex = mm_table.indexOf(mm_table.getSelection()[0]);
-				int index = mm_table.getTopIndex();
-				while (index < mm_table.getItemCount()) {
+				int selectedIndex = table.indexOf(table.getSelection()[0]);
+				int index = table.getTopIndex();
+				while (index < table.getItemCount()) {
 					boolean visible = false;
-					final TableItem item = mm_table.getItem(index);
-					final Text text = new Text(mm_table, 0);
+					final TableItem item = table.getItem(index);
+					final Text text = new Text(table, 0);
 					text.setEchoChar('*');
 					text.addFocusListener(new FocusListener() {						
 						@Override
@@ -134,7 +130,7 @@ public class ChooseServerComponent {
 						text.setFocus();
 					} else {
 						PortalServer s = (PortalServer) PortalServerPref.getServers().get(selectedIndex);
-						mm_serverDetails.setText("Host: " + s.getHost() + "  Port: " + s.getPort() + "  Login: " + s.getLoginId());
+						serverDetails.setText("Host: " + s.getHost() + "  Port: " + s.getPort() + "  Login: " + s.getLoginId());
 					}
 
 					if ((!visible) && (rect.intersects(clientArea))) {
@@ -147,22 +143,22 @@ public class ChooseServerComponent {
 				}
 			}
 		});
-		this.mm_table.addListener(32, new Listener() {
+		this.table.addListener(32, new Listener() {
 			public void handleEvent(Event event) {
-				Rectangle clientArea = mm_table.getClientArea();
+				Rectangle clientArea = table.getClientArea();
 				Point pt = new Point(event.x, event.y);
-				int index = mm_table.getTopIndex();
-				while (index < mm_table.getItemCount()) {
+				int index = table.getTopIndex();
+				while (index < table.getItemCount()) {
 					boolean visible = false;
-					TableItem item = mm_table.getItem(index);
+					TableItem item = table.getItem(index);
 					for (int i = 0; i < 3; ++i) {
 						Rectangle rect = item.getBounds(i);
 						if (rect.contains(pt)) {
 							if (i == 1) {
 								PortalServer s = (PortalServer) PortalServerPref.getServers().get(index);
-								mm_table.setToolTipText("Alias:" + s.getName() + "\n" + "Host: " + s.getHost() + "\n" + "Port: " + s.getPort());
+								table.setToolTipText("Alias:" + s.getName() + "\n" + "Host: " + s.getHost() + "\n" + "Port: " + s.getPort());
 							} else {
-								mm_table.setToolTipText(null);
+								table.setToolTipText(null);
 							}
 						}
 						if ((visible) || (!rect.intersects(clientArea)))
@@ -179,23 +175,23 @@ public class ChooseServerComponent {
 	}
 
 	public void createTablesColumns() {
-		this.mm_table.setLinesVisible(true);
-		this.mm_table.setHeaderVisible(true);
+		this.table.setLinesVisible(true);
+		this.table.setHeaderVisible(true);
 
-		TableColumn columnAlias = new TableColumn(this.mm_table, 0);
+		TableColumn columnAlias = new TableColumn(this.table, 0);
 		columnAlias.setText("Alias");
 		columnAlias.setWidth(120);
-		TableColumn columnLogin = new TableColumn(this.mm_table, 0);
+		TableColumn columnLogin = new TableColumn(this.table, 0);
 		columnLogin.setText("Login");
 		columnLogin.setWidth(80);
-		TableColumn columnPasswd = new TableColumn(this.mm_table, 0);
+		TableColumn columnPasswd = new TableColumn(this.table, 0);
 		columnPasswd.setText("Password");
 		columnPasswd.setWidth(80);
-		TableColumn columnDesc = new TableColumn(this.mm_table, 0);
+		TableColumn columnDesc = new TableColumn(this.table, 0);
 		columnDesc.setText("Description");
 		columnDesc.setWidth(300);
 
-		this.mm_table.setSize(this.mm_table.computeSize(400, 150));
+		this.table.setSize(this.table.computeSize(400, 150));
 	}
 
 	private String toStar(String s) {
@@ -210,17 +206,17 @@ public class ChooseServerComponent {
 		ArrayList<PortalServer> serversList = PortalServerPref.getServers();
 		if (serversList == null)
 			return;
-		mm_tviewer.setInput(serversList);
+		tableViewer.setInput(serversList);
 	}
 
 	public void createButton() {
-		Composite comp = new Composite(this.mm_group, 0);
+		Composite comp = new Composite(this.group, 0);
 		GridLayout gl = new GridLayout(3, false);
 		comp.setLayout(gl);
 
-		this.mm_buttonAdvanced = new Button(comp, 131080);
-		this.mm_buttonAdvanced.setText("Configure servers settings...");
-		this.mm_buttonAdvanced.addSelectionListener(new SelectionAdapter() {
+		this.buttonAdvanced = new Button(comp, 131080);
+		this.buttonAdvanced.setText("Configure servers settings...");
+		this.buttonAdvanced.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SapPortalPreferencePage page = new SapPortalPreferencePage();
 				page.setTitle("SAP Enterprise Portal");
@@ -239,27 +235,27 @@ public class ChooseServerComponent {
 
 		PreferenceManager manager = new PreferenceManager();
 		manager.addToRoot(targetNode);
-		final PreferenceDialog dialog = new PreferenceDialog(this.mm_container.getShell(), manager);
-		BusyIndicator.showWhile(this.mm_container.getDisplay(), new Runnable() {
+		final PreferenceDialog dialog = new PreferenceDialog(this.container.getShell(), manager);
+		BusyIndicator.showWhile(this.container.getDisplay(), new Runnable() {
 			public void run() {
 				dialog.create();
 				dialog.setMessage(targetNode.getLabelText());
 				dialog.open();
 			}
 		});
-		mm_tviewer.setInput(PortalServerPref.getServers());
+		tableViewer.setInput(PortalServerPref.getServers());
 		initializeTableSelection();
 	}
 
 	public void setVisible(boolean b) {
-		this.mm_table.setVisible(b);
-		this.mm_buttonAdvanced.setVisible(b);
-		this.mm_group.setVisible(b);
+		this.table.setVisible(b);
+		this.buttonAdvanced.setVisible(b);
+		this.group.setVisible(b);
 	}
 
 	public void createDetailsField() {
-		this.mm_serverDetails = new Label(this.mm_group, 16777216);
-		this.mm_serverDetails.setLayoutData(new GridData(256));
+		this.serverDetails = new Label(this.group, 16777216);
+		this.serverDetails.setLayoutData(new GridData(256));
 	}
 
 	private void initializeTableSelection() {
@@ -273,12 +269,12 @@ public class ChooseServerComponent {
 		int ind = indexForElement(targetServer);
 		if (ind == -1)
 			return;
-		this.mm_table.setSelection(ind);
-		this.mm_table.showSelection();
+		this.table.setSelection(ind);
+		this.table.showSelection();
 	}
 
 	private int indexForElement(PortalServer s) {
-		TableItem[] items = this.mm_table.getItems();
+		TableItem[] items = this.table.getItems();
 		for (int i = 0; i < items.length; ++i) {
 			if (items[i].getData().equals(s)) {
 				return i;
@@ -296,20 +292,20 @@ public class ChooseServerComponent {
 	}
 
 	public PortalServer getSelectedServer() {
-		int ind = this.mm_table.getSelectionIndex();
+		int ind = this.table.getSelectionIndex();
 		if (ind != -1) {
-			return (PortalServer) this.mm_table.getItem(ind).getData();
+			return (PortalServer) this.table.getItem(ind).getData();
 		}
 
 		return null;
 	}
 
 	public void addSelectionListener(SelectionListener listener) {
-		this.mm_table.addSelectionListener(listener);
+		this.table.addSelectionListener(listener);
 	}
 
 	public void addPaintListener(PaintListener listener) {
-		this.mm_table.addPaintListener(listener);
+		this.table.addPaintListener(listener);
 	}
 
 	public PortalServer getSelectedServerConfig() {
@@ -322,7 +318,7 @@ public class ChooseServerComponent {
 	}
 
 	public boolean isServerDefined() {
-		return this.mm_table.getItemCount() != 0;
+		return this.table.getItemCount() != 0;
 	}
 
 	class TableLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -366,11 +362,11 @@ public class ChooseServerComponent {
 		}
 
 		public void dispose() {
-			mm_tviewer.getLabelProvider().dispose();
+			tableViewer.getLabelProvider().dispose();
 		}
 
 		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-			mm_tviewer.refresh();
+			tableViewer.refresh();
 		}
 	}
 }

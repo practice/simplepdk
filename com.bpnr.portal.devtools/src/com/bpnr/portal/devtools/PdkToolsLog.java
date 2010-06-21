@@ -21,6 +21,10 @@ public class PdkToolsLog {
 		log(IStatus.ERROR, IStatus.OK, message, exception);
 	}
 
+	public static void logError(String message) {
+		log(IStatus.ERROR, IStatus.OK, message, null);
+	}
+
 	public static void log(int severity, int code, String message, Throwable exception) {
 		log(createStatus(severity, code, message, exception));
 	}

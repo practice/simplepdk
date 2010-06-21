@@ -30,10 +30,10 @@ public class SAPMPWizard extends Wizard implements IExportWizard {
 	SelectProjectWizardPage selectProjectPage;
 	private PortalServer selectedServer;
 	private ChooseServerComponent chooseServerComponent;
-	private IWorkbench workbench;
+//	private IWorkbench workbench;
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		this.workbench = workbench;
+//		this.workbench = workbench;
 		super.setNeedsProgressMonitor(true);
 		this.serversAndDeployPage = new SAPMPWizardPage();
 		// super.setDefaultPageImageDescriptor(SAPImageDescriptors.SAP_LOGO);
@@ -55,7 +55,7 @@ public class SAPMPWizard extends Wizard implements IExportWizard {
 					monitor.subTask("Rebuilding the project...");
 
 					if (!EclipseIDE.rebuildCurrentProject(selectedProject, monitor)) {
-						MessageDialog.openError(workbench.getActiveWorkbenchWindow().getShell(), "Build Error", "Build of the project " + selectedProject.getName() + " failed.");
+						PdkToolsLog.logError("Build Error: Build of the project " + selectedProject.getName() + " failed.");
 						return;
 					}
 
@@ -74,42 +74,14 @@ public class SAPMPWizard extends Wizard implements IExportWizard {
 
 						processUpload(monitor, prospectedParFile);
 					} catch (FileNotExistException e) {
-						e.printStackTrace();
-						// SapPortalPluginsLogger.logError(this, e);
-						// uploadSucceededOrOmitted = true;
-						//
-						// String fileNameRelativeToProjectRoot =
-						// AbstractIDE.getSlashSeparatedNameFromStringArray(e.getSegmentsInProject(),
-						// File.separatorChar);
-						// SAPMPWizard.access$102(SAPMPWizard.this, false);
-						// SAPMPWizard.access$202(SAPMPWizard.this,
-						// "Sorry, file " + e.getFile().getAbsolutePath() +
-						// " does not exist on harddisk,\nalthough it is referenced as "
-						// + fileNameRelativeToProjectRoot +
-						// " in the project.\nCancelling process.");
-						// SAPMPWizard.access$302(SAPMPWizard.this,
-						// e.getClass().getName());
+						PdkToolsLog.logError("Sorry, file " + e.getFile().getAbsolutePath() + " does not exist on harddisk. Cancelling process.", e);
 					} catch (Exception e) {
-						e.printStackTrace();
-						// SapPortalPluginsLogger.logError(this, e);
-						// uploadSucceededOrOmitted = true;
-						// SAPMPWizard.access$102(SAPMPWizard.this, false);
-						// SAPMPWizard.access$202(SAPMPWizard.this,
-						// e.getMessage());
-						// SAPMPWizard.access$302(SAPMPWizard.this,
-						// e.getClass().getName());
+						PdkToolsLog.logError(e);
 					}
-
 					monitor.worked(1);
 				} catch (Exception e) {
-					e.printStackTrace();
-					// SapPortalPluginsLogger.logError(this, e);
-					// SAPMPWizard.access$102(SAPMPWizard.this, false);
-					// SAPMPWizard.access$302(SAPMPWizard.this,
-					// e.getClass().getName());
-					// SAPMPWizard.access$202(SAPMPWizard.this, e.getMessage());
+					PdkToolsLog.logError(e);
 				}
-
 				monitor.done();
 			}
 
@@ -123,131 +95,15 @@ public class SAPMPWizard extends Wizard implements IExportWizard {
 						deployEngine.deploy(prospectedParFile);
 						uploadFinished = 0;
 					} catch (UnknownHostException e) {
-						e.printStackTrace();
-						// uploadFinished =
-						// guiSystem.showOptionDialog(SAPMPWizard.this.getShell(),
-						// "Operation failed: Unknown host \nPlease make sure the server '"
-						// + SAPMPWizard.this.mm_server.getAlias() + "' (" +
-						// SAPMPWizard.this.mm_server.getHost() + ":" +
-						// SAPMPWizard.this.mm_server.getPort() +
-						// ") exists and is running.",
-						// "Unable to connect to the Portal", 2,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS[1]);
-						//
-						// if (uploadFinished == 0) {
-						// SAPMPWizard.access$702(SAPMPWizard.this, true);
-						// }
-						//
-						// if (uploadFinished == 1) {
-						// uploadSucceededOrOmitted = false;
-						// }
+						PdkToolsLog.logError("Operation failed: Unknown host \nPlease make sure the server '" + selectedServer.getName() + "' (" + selectedServer.getHost() + ":"
+								+ selectedServer.getPort() + ") exists and is running.", e);
 					} catch (ConnectException e) {
-						e.printStackTrace();
-						// SapPortalPluginsLogger.logError(this, e);
-						// uploadFinished =
-						// guiSystem.showOptionDialog(SAPMPWizard.this.getShell(),
-						// "Operation failed: " + e.getMessage() +
-						// "\nPlease make sure the server '"
-						// + SAPMPWizard.this.mm_server.getAlias() + "' (" +
-						// SAPMPWizard.this.mm_server.getHost() + ":" +
-						// SAPMPWizard.this.mm_server.getPort() +
-						// ") is running.",
-						// "Unable to connect to the Portal", 2,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS[1]);
-						//
-						// if (uploadFinished == 0) {
-						// SAPMPWizard.access$702(SAPMPWizard.this, true);
-						// }
-						//
-						// if (uploadFinished == 1) {
-						// uploadSucceededOrOmitted = false;
-						// }
+						PdkToolsLog.logError("Operation failed: " + e.getMessage() + "\nPlease make sure the server '" + selectedServer.getName() + "' (" + selectedServer.getHost() + ":"
+								+ selectedServer.getPort() + ") is running. Unable to connect to the Portal", e);
 					} catch (DeploymentException e) {
-						e.printStackTrace();
-						String response = e.getResponse();
-
-						// SapPortalPluginsLogger.logError(this,
-						// "Upload Error message: " + e.getMessage());
-						// SapPortalPluginsLogger.logError(this,
-						// "Upload Response: " + response);
-						// SapPortalPluginsLogger.logError(this,
-						// "Upload Target Component: " +
-						// e.getTargetComponent());
-						//
-						// if (response != null) {
-						// if (response.indexOf("<html>") != -1) {
-						// uploadFinished =
-						// guiSystem.showOptionDialog(SAPMPWizard.this.getShell(),
-						// "PAR upload failed: " + e.getTargetComponent() +
-						// ".\n"
-						// + "Please check the user ID and password.",
-						// "Unable to connect to the Portal", 2,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS[1]);
-						// } else if (response.indexOf("<?xml") != -1) {
-						// uploadFinished =
-						// guiSystem.showOptionDialog(SAPMPWizard.this.getShell(),
-						// "PAR upload failed: " + e.getTargetComponent() +
-						// ".\n"
-						// +
-						// "Please check the log (sap-plugin.log) for more detail.",
-						// "Unable to connect to the Portal", 2,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS[1]);
-						// } else {
-						// uploadFinished =
-						// guiSystem.showOptionDialog(SAPMPWizard.this.getShell(),
-						// "PAR upload failed: " + e.getTargetComponent() +
-						// ".\n" + "No detail have been provided.",
-						// "Unable to connect to the Portal", 2,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS[1]);
-						// }
-						//
-						// } else {
-						// uploadFinished =
-						// guiSystem.showOptionDialog(SAPMPWizard.this.getShell(),
-						// "PAR upload failed: " + e.getTargetComponent() + "."
-						// + "\nPlease make sure the server '"
-						// + SAPMPWizard.this.mm_server.getAlias() + "' (" +
-						// SAPMPWizard.this.mm_server.getHost() + ":" +
-						// SAPMPWizard.this.mm_server.getPort() +
-						// ") is running." + "\n"
-						// + message, "Unable to connect to the Portal", 2,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS[1]);
-						// }
-						//
-						// if (uploadFinished == 0) {
-						// SAPMPWizard.access$702(SAPMPWizard.this, true);
-						// }
-						//
-						// if (uploadFinished == 1) {
-						// uploadSucceededOrOmitted = false;
-						// }
+						PdkToolsLog.logError("PAR upload failed: " + e.getTargetComponent() + ". Please check the user ID and password.", e);
 					} catch (Exception e) {
-						e.printStackTrace();
-						// SapPortalPluginsLogger.logError(this, e);
-						//
-						// uploadFinished =
-						// guiSystem.showOptionDialog(SAPMPWizard.this.getShell(),
-						// "Operation failed: Please make sure the server '" +
-						// SAPMPWizard.this.mm_server.getAlias() + "' ("
-						// + SAPMPWizard.this.mm_server.getHost() + ":" +
-						// SAPMPWizard.this.mm_server.getPort() +
-						// ") is running or check the log (" +
-						// SapPortalPluginsLogger.LOG_NAME
-						// + ") for more detail.",
-						// "Unable to connect to the Portal", 2,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS,
-						// SAPMPWizardStringLiterals.UPLOAD_NO_SUCCESS_OPTIONS[1]);
-						//
-						// if (uploadFinished == 0) {
-						// SAPMPWizard.access$702(SAPMPWizard.this, true);
-						// }
-
+						PdkToolsLog.logError(e);
 					}
 				} while (uploadFinished != 0);
 			}
@@ -255,17 +111,15 @@ public class SAPMPWizard extends Wizard implements IExportWizard {
 		};
 		try {
 			super.getContainer().run(false, false, runnable);
-		} catch (InvocationTargetException ite) {
-			Throwable cause = ite.getTargetException();
+		} catch (InvocationTargetException e) {
+			Throwable cause = e.getTargetException();
 			if (cause != null) {
-				cause.printStackTrace();
-				// SapPortalPluginsLogger.logError(this, cause);
+				PdkToolsLog.logError(e);
 				this.mm_statusType = cause.getClass().getName();
 				this.mm_statusMessage = cause.getMessage();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			// SapPortalPluginsLogger.logError(this, e);
+			PdkToolsLog.logError(e);
 			this.mm_statusType = e.getClass().getName();
 			this.mm_statusMessage = e.getMessage();
 		}

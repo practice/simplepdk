@@ -11,22 +11,13 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart;
-import org.eclipse.jdt.ui.IPackagesViewPart;
 import org.eclipse.jdt.ui.wizards.NewJavaProjectWizardPageOne;
 import org.eclipse.jdt.ui.wizards.NewJavaProjectWizardPageTwo;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
@@ -50,28 +41,12 @@ public class NewSapportalProjectWizard extends Wizard implements INewWizard {
 			PlatformUI.getWorkbench().getWorkingSetManager().addToWorkingSets(newElement, workingSets);
 		}
 
-		// BasicNewProjectResourceWizard.updatePerspective(fConfigElement);
 		selectAndReveal(pageTwo.getJavaProject().getProject());
 
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				IWorkbenchPart activePart = getActivePart();
-				if (activePart instanceof IPackagesViewPart) {
-					PackageExplorerPart view = PackageExplorerPart.openInActivePerspective();
-					view.tryToReveal(newElement);
-				}
-			}
-		});
-
-		System.out.println("performFinish");
 		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(pageOne.getProjectName());
 		IPath projectPath = project.getFullPath();
 		try {
-//			if (project.isAccessible()) {
-//				pageTwo.createProject(project, pageOne.getProjectLocationURI(), null);
-//				project.open(null);
-//			}
 			IPath dist = createFolderResource(workspaceRoot, projectPath, "dist");
 
 			createFolderResource(workspaceRoot, dist, "css");
@@ -94,22 +69,10 @@ public class NewSapportalProjectWizard extends Wizard implements INewWizard {
 			createFolderResource(workspaceRoot, privateRes, "lib");
 			createPortalAppXml(workspaceRoot, portalInf);
 		} catch (CoreException e) {
-			Status status = new Status(IStatus.ERROR, PdkToolsActivator.PLUGIN_ID, IStatus.ERROR, e.getMessage() != null ? e.getMessage() : e.toString(), e);
-			ErrorDialog.openError(getShell(), "Cannot create project resource folders", e.getMessage(), status);
+			PdkToolsLog.logError("Cannot create project", e);
 			return false;
 		}
 		return true;
-	}
-
-	private IWorkbenchPart getActivePart() {
-		IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
-		if (activeWindow != null) {
-			IWorkbenchPage activePage = activeWindow.getActivePage();
-			if (activePage != null) {
-				return activePage.getActivePart();
-			}
-		}
-		return null;
 	}
 
 	protected void selectAndReveal(IResource newResource) {
