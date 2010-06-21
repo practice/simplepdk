@@ -80,6 +80,11 @@ public class NewSapportalProjectWizard extends Wizard implements INewWizard {
 		}
 		return true;
 	}
+	
+	@Override
+	public boolean canFinish() {
+		return pageTwo.getJavaProject() != null;
+	}
 
 	private void copyFileResource(IWorkspaceRoot workspaceRoot, IPath parent, String filename) throws CoreException {
 		IPath filePath = parent.append(filename);
