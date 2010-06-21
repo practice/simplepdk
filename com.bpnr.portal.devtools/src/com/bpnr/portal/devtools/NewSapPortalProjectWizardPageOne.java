@@ -34,7 +34,4 @@ public class NewSapPortalProjectWizardPageOne extends NewJavaProjectWizardPageOn
 		return classpathEntries;
 	}
 	
-	
-	
-	
 }

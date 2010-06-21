@@ -55,7 +55,8 @@ public class NewSapportalProjectWizard extends Wizard implements INewWizard {
 			IPath portalInf = createFolderResource(workspaceRoot, dist, "PORTAL-INF");
 
 			createFolderResource(workspaceRoot, portalInf, "classes");
-			createFolderResource(workspaceRoot, portalInf, "jsp");
+			IPath jspPath = createFolderResource(workspaceRoot, portalInf, "jsp");
+			copyFileResource(workspaceRoot, jspPath, "sample.jsp");
 			createFolderResource(workspaceRoot, portalInf, "lib");
 			createFolderResource(workspaceRoot, portalInf, "localization");
 			createFolderResource(workspaceRoot, portalInf, "logger");
@@ -67,12 +68,25 @@ public class NewSapportalProjectWizard extends Wizard implements INewWizard {
 
 			createFolderResource(workspaceRoot, privateRes, "classes");
 			createFolderResource(workspaceRoot, privateRes, "lib");
-			createPortalAppXml(workspaceRoot, portalInf);
+			copyFileResource(workspaceRoot, portalInf, "portalapp.xml");
+			
+			// create .settings 
+			IPath settings = createFolderResource(workspaceRoot, projectPath, ".settings");
+			copyFileResource(workspaceRoot, settings, "org.eclipse.jst.jsp.core.prefs");
+			copyFileResource(workspaceRoot, settings, "org.eclipse.wst.html.core.prefs");
 		} catch (CoreException e) {
 			PdkToolsLog.logError("Cannot create project", e);
 			return false;
 		}
 		return true;
+	}
+
+	private void copyFileResource(IWorkspaceRoot workspaceRoot, IPath parent, String filename) throws CoreException {
+		IPath filePath = parent.append(filename);
+		IFile file = workspaceRoot.getFile(filePath);
+		InputStream is = getClass().getResourceAsStream("/com/bpnr/portal/devtools/resources/" + filename);
+		file.create(is, true, null);
+		
 	}
 
 	protected void selectAndReveal(IResource newResource) {
@@ -83,13 +97,6 @@ public class NewSapportalProjectWizard extends Wizard implements INewWizard {
 	public boolean performCancel() {
 		pageTwo.performCancel();
 		return super.performCancel();
-	}
-
-	private void createPortalAppXml(IWorkspaceRoot workspaceRoot, IPath portalInf) throws CoreException {
-		IPath portalappPath = portalInf.append("portalapp.xml");
-		IFile file = workspaceRoot.getFile(portalappPath);
-		InputStream is = getClass().getResourceAsStream("/com/bpnr/portal/devtools/portalapp.xml");
-		file.create(is, true, null);
 	}
 
 	private IPath createFolderResource(IWorkspaceRoot workspaceRoot, IPath parent, String name) throws CoreException {
