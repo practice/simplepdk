@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="PDK Action Set"
+            visible="true"
+            id="com.bpnr.portal.devtools.pdkActionSet">
+         <action
+               label="Export PAR"
+               icon="icons/sample.gif"
+               class="com.bpnr.portal.devtools.actions.UploadParAction"
+               tooltip="Export PAR"
+               toolbarPath="pdk"
+               id="com.bpnr.portal.devtools.actions.UploadParAction">
+         </action>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.bpnr.portal.devtools.sapportal"
+            name="SAP Portal">
+      </category>
+      <wizard
+            category="com.bpnr.portal.devtools.sapportal"
+            class="com.bpnr.portal.devtools.NewSapportalProjectWizard"
+            id="com.bpnr.portal.devtools.newsapportalprojectwizard"
+            name="PDK Portal Project">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="com.bpnr.portal.devtools.exportCategory"
+            name="SAP Portal">
+      </category>
+      <wizard
+            category="com.bpnr.portal.devtools.exportCategory"
+            class="com.bpnr.portal.devtools.ExportParWizard"
+            id="com.bpnr.portal.devtools.exportpar"
+            name="Export PAR file">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.bpnr.portal.devtools.preferences.SapPortalPreferencePage"
+            id="com.bpnr.portal.devtools.preferences.SapPortalPreferencePage"
+            name="SAP Enterprise Portal">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.bpnr.portal.devtools.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>
