@@ -4,14 +4,12 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 public class SAPMPWizardPage extends WizardPage {
 
 	private ChooseServerComponent serverChooser;
-//	private IProject project;
 
 	public SAPMPWizardPage() {
 		super("PAR Deploy");
@@ -29,13 +27,7 @@ public class SAPMPWizardPage extends WizardPage {
 
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
-
-		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
-
-		layout.verticalSpacing = 9;
-
-		GridData gd = new GridData(768);
+		container.setLayout(new FillLayout());
 
 		this.serverChooser = new ChooseServerComponent(container);
 		container.setFocus();
@@ -49,15 +41,6 @@ public class SAPMPWizardPage extends WizardPage {
 		});
 		container.setFocus();
 	}
-
-//	public void setVisible(boolean visible) {
-//		this.project = ((SAPMPWizard) super.getWizard()).getSelectedProject();
-//		super.setVisible(visible);
-//	}
-
-//	public void setSelectedProject(IProject project) {
-//		this.project = project;
-//	}
 
 	public ChooseServerComponent getServerConfigSelector() {
 		return this.serverChooser;
