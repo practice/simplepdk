@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import com.bpnr.portal.devtools.Activator;
+import com.bpnr.portal.devtools.PdkToolsActivator;
 
 /**
  * 
@@ -45,7 +45,7 @@ public class SapPortalPreferencePage extends PreferencePage implements IWorkbenc
 	private IStructuredContentProvider contentProvider = new ServerListContentProvider(PortalServerPref.getServers());
 
 	public SapPortalPreferencePage() {
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(PdkToolsActivator.getDefault().getPreferenceStore());
 		setDescription("Enter information to define your servers.");
 	}
 

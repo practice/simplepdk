@@ -94,7 +94,7 @@ public class NewSapportalProjectWizard extends Wizard implements INewWizard {
 			createFolderResource(workspaceRoot, privateRes, "lib");
 			createPortalAppXml(workspaceRoot, portalInf);
 		} catch (CoreException e) {
-			Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, e.getMessage() != null ? e.getMessage() : e.toString(), e);
+			Status status = new Status(IStatus.ERROR, PdkToolsActivator.PLUGIN_ID, IStatus.ERROR, e.getMessage() != null ? e.getMessage() : e.toString(), e);
 			ErrorDialog.openError(getShell(), "Cannot create project resource folders", e.getMessage(), status);
 			return false;
 		}

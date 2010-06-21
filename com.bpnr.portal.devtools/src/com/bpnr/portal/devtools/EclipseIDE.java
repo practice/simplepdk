@@ -43,7 +43,7 @@ public class EclipseIDE {
 
 	public static IProject getCurrentProject() {
 
-		IWorkbenchPart activePart = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+		IWorkbenchPart activePart = PdkToolsActivator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 
 		if (activePart instanceof ResourceNavigator) {
 			try {
@@ -85,7 +85,7 @@ public class EclipseIDE {
 					return null;
 				return ((IFileEditorInput) input).getFile().getProject();
 			} catch (Exception e) {
-				ISelection simple = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+				ISelection simple = PdkToolsActivator.getDefault().getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 				try {
 					if (simple instanceof IStructuredSelection) {
 						Object o = ((IStructuredSelection) simple).getFirstElement();
@@ -159,7 +159,7 @@ public class EclipseIDE {
 	}
 
 	public static void saveAllDirtyEditorsForProject(IProject project, IProgressMonitor monitor) {
-		IWorkbenchWindow[] workbenchWindows = Activator.getDefault().getWorkbench().getWorkbenchWindows();
+		IWorkbenchWindow[] workbenchWindows = PdkToolsActivator.getDefault().getWorkbench().getWorkbenchWindows();
 
 		for (int i = 0; i < workbenchWindows.length; ++i) {
 			IWorkbenchWindow workbenchWindow = workbenchWindows[i];

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Devtools
+Bundle-Name: PDK tools
 Bundle-SymbolicName: com.bpnr.portal.devtools; singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.bpnr.portal.devtools.Activator
+Bundle-Activator: com.bpnr.portal.devtools.PdkToolsActivator
 Bundle-Vendor: BPNR
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

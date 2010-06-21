@@ -20,8 +20,6 @@ public class ExportParWizard extends Wizard implements IExportWizard {
 		setWindowTitle("Export PAR file");
 	}
 
-//	private File myDir = new File("c:" + File.separator + "tmp" + File.separator + "eclipsebuild");
-//	private SimpleOneDirClassLoader loader;
 	private IExportWizard delegatee;
 
 	public int hashCode() {
