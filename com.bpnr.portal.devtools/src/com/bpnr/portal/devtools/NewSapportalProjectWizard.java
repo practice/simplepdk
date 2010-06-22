@@ -74,6 +74,10 @@ public class NewSapportalProjectWizard extends Wizard implements INewWizard {
 			IPath settings = createFolderResource(workspaceRoot, projectPath, ".settings");
 			copyFileResource(workspaceRoot, settings, "org.eclipse.jst.jsp.core.prefs");
 			copyFileResource(workspaceRoot, settings, "org.eclipse.wst.html.core.prefs");
+			
+			// copy sample java source.
+			// TODO copy sample java source.
+//			pageTwo.getJavaProject().
 		} catch (CoreException e) {
 			PdkToolsLog.logError("Cannot create project", e);
 			return false;

@@ -1,0 +1,23 @@
+package com.example.portal.sample;
+
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.bpnr.portal.sample.domain.*;
+import com.bpnr.portal.springbridge.SpringAwarePortalComponent;
+import com.sapportals.portal.prt.component.IPortalComponentRequest;
+import com.sapportals.portal.prt.component.IPortalComponentResponse;
+import com.sapportals.portal.prt.logger.ILogger;
+import com.sapportals.portal.prt.resource.IResource;
+import com.sapportals.portal.prt.runtime.PortalRuntime;
+
+public class RunMe extends AbstractPortalComponent {
+	ILogger log = PortalRuntime.getLogger();
+
+	public void doContent(IPortalComponentRequest request, IPortalComponentResponse response) {
+		response.write("Hello PDK");
+	}
+}

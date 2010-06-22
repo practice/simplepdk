@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application>
 	<application-config>
-		<property name="SharingReference" value="" />
+		<property name="SharingReference"
+			value="com.sap.portal.ivs.connectorservice,com.sap.portal.ivs.systemlandscapeservice" />
 	</application-config>
 	<components>
+		<component name="RunMe">
+			<component-config>
+				<property name="ClassName" value="com.example.portal.sample.RunMe" />
+			</component-config>
+			<component-profile>
+				<property name="bpnr"
+					value="/SERVICE/com.bpnr.portal.tags/taglib/bpnr.tld" />
+			</component-profile>
+		</component>
 	</components>
 	<services />
 </application>

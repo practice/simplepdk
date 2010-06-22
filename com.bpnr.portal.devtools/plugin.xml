@@ -10,7 +10,7 @@
             id="com.bpnr.portal.devtools.pdkActionSet">
          <action
                label="Export PAR"
-               icon="icons/sample.gif"
+               icon="icons/UploadPar.gif"
                class="com.bpnr.portal.devtools.actions.UploadParAction"
                tooltip="Export PAR"
                toolbarPath="pdk"
@@ -27,6 +27,7 @@
       <wizard
             category="com.bpnr.portal.devtools.sapportal"
             class="com.bpnr.portal.devtools.NewSapportalProjectWizard"
+            icon="icons/NewProject.gif"
             id="com.bpnr.portal.devtools.newsapportalprojectwizard"
             name="PDK Portal Project">
       </wizard>
