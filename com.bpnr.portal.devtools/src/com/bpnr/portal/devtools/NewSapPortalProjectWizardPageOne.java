@@ -5,14 +5,8 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IAccessRule;
-import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.internal.core.JavaModelManager;
-import org.eclipse.jdt.internal.core.UserLibrary;
-import org.eclipse.jdt.internal.core.UserLibraryClasspathContainer;
-import org.eclipse.jdt.internal.core.UserLibraryManager;
 import org.eclipse.jdt.ui.wizards.NewJavaProjectWizardPageOne;
 
 public class NewSapPortalProjectWizardPageOne extends NewJavaProjectWizardPageOne {
@@ -40,12 +34,12 @@ public class NewSapPortalProjectWizardPageOne extends NewJavaProjectWizardPageOn
 //		UserLibraryClasspathContainer container = new UserLibraryClasspathContainer("");
 //		entries.add(JavaCore.newContainerEntry(new Path(JavaCore.USER_LIBRARY_CONTAINER_ID + "/SAPPORTAL_LIBS"), true));
 		ArrayList<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
-		entries.add(newVariableEntry("SAPPORTAL/prtapi.jar"));
-		entries.add(newVariableEntry("SAPPORTAL/servlet.jar"));
-		entries.add(newVariableEntry("SAPPORTAL/activation.jar"));
-		entries.add(newVariableEntry("SAPPORTAL/com.sap.security.api.jar"));
-		entries.add(newVariableEntry("SAPPORTAL/mail.jar"));
-		entries.add(newVariableEntry("SAPPORTAL/GenericConnector.jar"));
+		entries.add(newVariableEntry("SAPPORTAL_LIBS/prtapi.jar"));
+		entries.add(newVariableEntry("SAPPORTAL_LIBS/servlet.jar"));
+		entries.add(newVariableEntry("SAPPORTAL_LIBS/activation.jar"));
+		entries.add(newVariableEntry("SAPPORTAL_LIBS/com.sap.security.api.jar"));
+		entries.add(newVariableEntry("SAPPORTAL_LIBS/mail.jar"));
+		entries.add(newVariableEntry("SAPPORTAL_LIBS/GenericConnector.jar"));
 		
 		IClasspathEntry[] defaultEntries = super.getDefaultClasspathEntries();
 		ArrayList<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
