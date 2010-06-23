@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Simple PDK" url="http://where to download">
+      Eclipse plugin to develop SAP Portal iView.
+
+It does not provide all the functionality of NWDS from SAP.
+
+Notable features include:
+
+    * Based on Eclipse 3 upwards.
+    * Can export to PAR file and upload to SAP EP.
+    * Wizard to create a PDK project.
+    * Preference page to specify SAP Portal servers to upload your par file.
+   </description>
+   <feature url="features/com.bpnr.portal.devtool.feature_1.0.0.201006211442.jar" id="com.bpnr.portal.devtool.feature" version="1.0.0.201006211442">
+      <category name="com.bpnr.portal.devtools"/>
+   </feature>
+   <category-def name="com.bpnr.portal.devtools" label="PDK Tools"/>
+</site>
