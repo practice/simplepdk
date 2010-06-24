@@ -152,10 +152,13 @@ public class SapPortalPreferencePage extends PreferencePage implements IWorkbenc
 			return;
 		PortalServer toAdd = new PortalServer(diag.getAliasValue(), diag.getHostValue(), diag.getPortValue(), diag.getLoginValue(), diag.getDescriptionValue());
 		PortalServerPref.getServers().add(toAdd);
+		if (PortalServerPref.getServers().size() == 1) {
+			PortalServerPref.setDefServer(toAdd.getName());
+		}
 		tableViewer.setInput(toAdd);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	protected void doRemoveAction() {
 		ISelection s = tableViewer.getSelection();
 		Iterator it = ((IStructuredSelection) s).iterator();
@@ -163,6 +166,9 @@ public class SapPortalPreferencePage extends PreferencePage implements IWorkbenc
 			Object o = it.next();
 			PortalServerPref.getServers().remove(o);
 			tableViewer.setInput(o);
+		}
+		if (PortalServerPref.getServers().size() > 0 && tableViewer.getCheckedElements().length == 0) {
+			tableViewer.setChecked(PortalServerPref.getServers().get(0), true);
 		}
 		this.btnRemove.setEnabled(false);
 		this.btnEdit.setEnabled(false);
