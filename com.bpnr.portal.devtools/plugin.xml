@@ -18,7 +18,7 @@
          </action>
          <action
                class="com.bpnr.portal.devtools.actions.RunAction"
-               icon="icons/UploadPar.gif"
+               icon="icons/run_exec.gif"
                id="com.bpnr.portal.devtools.actions.RunAction"
                label="Run Portal Component"
                toolbarPath="pdk"
