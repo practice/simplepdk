@@ -16,6 +16,14 @@
                toolbarPath="pdk"
                id="com.bpnr.portal.devtools.actions.UploadParAction">
          </action>
+         <action
+               class="com.bpnr.portal.devtools.actions.RunAction"
+               icon="icons/UploadPar.gif"
+               id="com.bpnr.portal.devtools.actions.RunAction"
+               label="Run Portal Component"
+               toolbarPath="pdk"
+               tooltip="Run Portal Component">
+         </action>
       </actionSet>
    </extension>
    <extension
