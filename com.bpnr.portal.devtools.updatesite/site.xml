@@ -12,7 +12,7 @@ Notable features include:
     * Wizard to create a PDK project.
     * Preference page to specify SAP Portal servers to upload your par file.
    </description>
-   <feature url="features/com.bpnr.portal.devtool.feature_1.0.0.201006231336.jar" id="com.bpnr.portal.devtool.feature" version="1.0.0.201006231336">
+   <feature url="features/com.bpnr.portal.devtool.feature_1.0.0.201006231656.jar" id="com.bpnr.portal.devtool.feature" version="1.0.0.201006231656">
       <category name="com.bpnr.portal.devtools"/>
    </feature>
    <category-def name="com.bpnr.portal.devtools" label="PDK Tools"/>
