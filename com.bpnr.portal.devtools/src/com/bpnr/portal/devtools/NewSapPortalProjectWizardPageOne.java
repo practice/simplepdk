@@ -40,6 +40,10 @@ public class NewSapPortalProjectWizardPageOne extends NewJavaProjectWizardPageOn
 		entries.add(newVariableEntry("SAPPORTAL_LIBS/com.sap.security.api.jar"));
 		entries.add(newVariableEntry("SAPPORTAL_LIBS/mail.jar"));
 		entries.add(newVariableEntry("SAPPORTAL_LIBS/GenericConnector.jar"));
+		entries.add(newVariableEntry("SAPPORTAL_LIBS/connector1.0.jar"));
+		entries.add(newVariableEntry("SAPPORTAL_LIBS/portal_services_api_lib.jar"));
+		entries.add(newVariableEntry("SAPPORTAL_LIBS/com.sap.portal.ivs.connectorservice_api.jar"));
+		entries.add(newVariableEntry("SAPPORTAL_LIBS/exception.jar"));
 		
 		IClasspathEntry[] defaultEntries = super.getDefaultClasspathEntries();
 		ArrayList<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
