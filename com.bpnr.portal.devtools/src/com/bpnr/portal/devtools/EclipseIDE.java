@@ -186,7 +186,7 @@ public class EclipseIDE {
 		HashMap<String, File> entries = new HashMap<String, File>();
 		HashMap<String, File> apiEntries = new HashMap<String, File>();
 		HashMap<String, File> coreEntries = new HashMap<String, File>();
-		File classesDirectory = getOutPath(project, 0);
+		File classesApiDir = getOutPath(project, 0);
 
 		File parClassApiJarFile = File.createTempFile(parName + "api", "jar");
 		File parClassCoreJarFile = File.createTempFile(parName + "core", "jar");
@@ -197,7 +197,7 @@ public class EclipseIDE {
 		try {
 			parClassApiJarFos = new FileOutputStream(parClassApiJarFile);
 			classesApiZos = new ZipOutputStream(parClassApiJarFos);
-			addDirectoryToZipFileRecursively("", classesDirectory, classesApiZos, new FileFilter() {
+			addDirectoryToZipFileRecursively("", classesApiDir, classesApiZos, new FileFilter() {
 				public boolean accept(File pathname) {
 					return true;
 				}
@@ -219,11 +219,12 @@ public class EclipseIDE {
 
 		ZipOutputStream classesCoreZos = null;
 		FileOutputStream parCLassCoreJarFos = null;
+		File classesCoreDir = getOutPath(project, 1);
 
 		try {
 			parCLassCoreJarFos = new FileOutputStream(parClassCoreJarFile);
 			classesCoreZos = new ZipOutputStream(parCLassCoreJarFos);
-			addDirectoryToZipFileRecursively("", classesDirectory, classesCoreZos, new FileFilter() {
+			addDirectoryToZipFileRecursively("", classesCoreDir, classesCoreZos, new FileFilter() {
 				public boolean accept(File pathname) {
 					return true;
 				}
