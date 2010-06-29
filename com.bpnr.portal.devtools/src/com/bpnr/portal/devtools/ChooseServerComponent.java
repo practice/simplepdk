@@ -15,24 +15,19 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -47,22 +42,22 @@ public class ChooseServerComponent {
 	private Composite container;
 	private Group group;
 	private Table table;
-	private static int PASSWD_COL = 2;
 	private Button buttonAdvanced;
 	private Label serverDetails;
 	private TableViewer tableViewer;
+	private Text passwordText;
 
 	public ChooseServerComponent(Composite container) {
 		this.container = container;
 
 		createTable();
-		addListeners();
 		createTablesColumns();
-
 		initializeTable();
 		initializeTableSelection();
 		createDetailsField();
 		createButton();
+
+		addListeners();
 	}
 
 	private void createTable() {
@@ -72,7 +67,7 @@ public class ChooseServerComponent {
 
 		this.table = new Table(this.group, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
-		GridData gd = new GridData(GridData.FILL_BOTH);
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.heightHint = 120;
 		this.table.setLayoutData(gd);
 
@@ -82,112 +77,46 @@ public class ChooseServerComponent {
 	}
 
 	private void addListeners() {
-		final TableEditor editor = new TableEditor(this.table);
-
-		this.table.addListener(3, new Listener() {
-
-			public void handleEvent(Event event) {
-				Rectangle clientArea = table.getClientArea();
-				Point pt = new Point(event.x, event.y);
-				TableItem[] selectedItems = table.getSelection();
-				if ((selectedItems == null) || (selectedItems.length != 1)) {
-					return;
-				}
-				int selectedIndex = table.indexOf(table.getSelection()[0]);
-				int index = table.getTopIndex();
-				while (index < table.getItemCount()) {
-					boolean visible = false;
-					final TableItem item = table.getItem(index);
-					final Text text = new Text(table, 0);
-					text.setEchoChar('*');
-					text.addFocusListener(new FocusListener() {						
-						@Override
-						public void focusLost(FocusEvent e) {
-							PortalServer server = (PortalServer) item.getData();
-							RememberServerPassword.get().setPassword(server.getName(), text.getText());
-						}
-						@Override
-						public void focusGained(FocusEvent e) {
-						}
-					});
-					Rectangle rect = item.getBounds(PASSWD_COL);
-					if (rect.contains(pt)) {
-						editor.horizontalAlignment = 16384;
-						editor.grabHorizontal = true;
-						editor.minimumWidth = 50;
-
-						editor.setEditor(text, item, PASSWD_COL);
-
-						if ((item.getData() != null) && (item.getData() instanceof PortalServer)) {
-							PortalServer s = (PortalServer) item.getData();
-							if (RememberServerPassword.get().getPassword(s.getName()) != null) {
-								text.setText(RememberServerPassword.get().getPassword(s.getName()));
-							} else {
-								text.setText("");
-							}
-						}
-
-						text.setFocus();
-					} else {
-						PortalServer s = (PortalServer) PortalServerPref.getServers().get(selectedIndex);
-						serverDetails.setText("Host: " + s.getHost() + "  Port: " + s.getPort() + "  Login: " + s.getLoginId());
-					}
-
-					if ((!visible) && (rect.intersects(clientArea))) {
-						visible = true;
-					}
-
-					if (!visible)
-						return;
-					++index;
-				}
+		table.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				PortalServer s = (PortalServer) e.item.getData();
+				updatePasswordField(s);
+				serverDetails.setText("Host: " + s.getHost() + "  Port: " + s.getPort() + "  Login: " + s.getLoginId());
 			}
-		});
-		this.table.addListener(32, new Listener() {
-			public void handleEvent(Event event) {
-				Rectangle clientArea = table.getClientArea();
-				Point pt = new Point(event.x, event.y);
-				int index = table.getTopIndex();
-				while (index < table.getItemCount()) {
-					boolean visible = false;
-					TableItem item = table.getItem(index);
-					for (int i = 0; i < 3; ++i) {
-						Rectangle rect = item.getBounds(i);
-						if (rect.contains(pt)) {
-							if (i == 1) {
-								PortalServer s = (PortalServer) PortalServerPref.getServers().get(index);
-								table.setToolTipText("Alias:" + s.getName() + "\n" + "Host: " + s.getHost() + "\n" + "Port: " + s.getPort());
-							} else {
-								table.setToolTipText(null);
-							}
-						}
-						if ((visible) || (!rect.intersects(clientArea)))
-							continue;
-						visible = true;
-					}
-
-					if (!visible)
-						return;
-					++index;
-				}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				PortalServer s = (PortalServer) e.item.getData();
+				updatePasswordField(s);
+				serverDetails.setText("Host: " + s.getHost() + "  Port: " + s.getPort() + "  Login: " + s.getLoginId());
 			}
+
 		});
+	}
+
+	private void updatePasswordField(PortalServer server) {
+		String password = RememberServerPassword.get().getPassword(server.getName());
+		if (password != null)
+			passwordText.setText(password);
+		else
+			passwordText.setText("");
 	}
 
 	public void createTablesColumns() {
 		this.table.setLinesVisible(true);
 		this.table.setHeaderVisible(true);
 
-		TableColumn columnAlias = new TableColumn(this.table, 0);
+		TableColumn columnAlias = new TableColumn(this.table, SWT.NONE);
 		columnAlias.setText("Alias");
 		columnAlias.setWidth(120);
-		TableColumn columnLogin = new TableColumn(this.table, 0);
+		TableColumn columnLogin = new TableColumn(this.table, SWT.NONE);
 		columnLogin.setText("Login");
 		columnLogin.setWidth(80);
-		TableColumn columnPasswd = new TableColumn(this.table, 0);
+		TableColumn columnPasswd = new TableColumn(this.table, SWT.NONE);
 		columnPasswd.setText("Password");
 		columnPasswd.setWidth(80);
-		TableColumn columnDesc = new TableColumn(this.table, 0);
+		TableColumn columnDesc = new TableColumn(this.table, SWT.NONE);
 		columnDesc.setText("Description");
 		columnDesc.setWidth(300);
 
@@ -254,8 +183,32 @@ public class ChooseServerComponent {
 	}
 
 	public void createDetailsField() {
-		this.serverDetails = new Label(this.group, 16777216);
-		this.serverDetails.setLayoutData(new GridData(256));
+		Composite detailPane = new Composite(group, SWT.NONE);
+		detailPane.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		GridLayout detailLayout = new GridLayout(3, false);
+		detailPane.setLayout(detailLayout);
+
+		this.serverDetails = new Label(detailPane, SWT.LEFT);
+		serverDetails.setText("");
+		this.serverDetails.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		
+		Label passwordLabel = new Label(detailPane, SWT.RIGHT);
+		passwordLabel.setText("Password: ");
+		passwordLabel.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
+		
+		passwordText = new Text(detailPane, SWT.BORDER | SWT.PASSWORD);
+		passwordText.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
+		passwordText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				TableItem[] items = table.getSelection();
+				if (items.length == 0)
+					return;
+				PortalServer server = (PortalServer) items[0].getData();
+				RememberServerPassword.get().setPassword(server.getName(), passwordText.getText());
+				tableViewer.update(server, null);
+			}
+		});
 	}
 
 	private void initializeTableSelection() {

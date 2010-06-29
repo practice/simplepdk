@@ -4,6 +4,8 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -39,6 +41,17 @@ public class SAPMPWizardPage extends WizardPage {
 				getContainer().updateButtons();
 			}
 		});
+		this.serverChooser.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				getContainer().updateButtons();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent event) {
+				getContainer().updateButtons();
+			}
+		});
 		container.setFocus();
 	}
 
@@ -47,6 +60,10 @@ public class SAPMPWizardPage extends WizardPage {
 	}
 
 	public boolean isPageComplete() {
-		return ((this.serverChooser != null) && (this.serverChooser.getSelectedServerConfig() != null));
+		if ((this.serverChooser != null) && (this.serverChooser.getSelectedServerConfig() != null)) {
+			String password = RememberServerPassword.get().getPassword(serverChooser.getSelectedServerConfig().getName());
+			return (password != null && password.length() > 0);
+		}
+		return false;
 	}
 }
