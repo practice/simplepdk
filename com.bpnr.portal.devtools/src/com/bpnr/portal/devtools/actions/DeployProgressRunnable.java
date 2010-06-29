@@ -89,11 +89,7 @@ public class DeployProgressRunnable implements IRunnableWithProgress {
 			PdkToolsLog.logError(e);
 		} finally {
 			if (!deploySuccess) {
-				try {
-					PdkToolsActivator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.pde.runtime.LogView");
-				} catch (PartInitException e) {
-					PdkToolsLog.logError(e);
-				}
+				EclipseIDE.showErrorLogView();
 			}
 		}
 	}

@@ -16,12 +16,14 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaModelMarker;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart;
@@ -33,6 +35,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.views.navigator.ResourceNavigator;
 
 import com.bpnr.portal.devtools.actions.FileNotExistException;
@@ -145,16 +148,12 @@ public class EclipseIDE {
 		} catch (Exception e) {
 			return false;
 		}
-
-		// IMarker[] markers =
-		// project.findMarkers("org.eclipse.jdt.core.problem", true,
-		// IResource.DEPTH_INFINITE);
-		// for (int i = 0; i < markers.length; ++i) {
-		// if (((Integer) markers[i].getAttribute("severity")).intValue() == 2)
-		// {
-		// return false;
-		// }
-		// }
+		
+		IMarker[] markers = project.findMarkers(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
+		for (IMarker marker : markers) {
+			if ((Integer)marker.getAttribute(IMarker.SEVERITY) == IMarker.SEVERITY_ERROR)
+				return false;
+		}
 		return true;
 	}
 
@@ -583,5 +582,12 @@ public class EclipseIDE {
 	public static String getParArchiveName(IProject project) {
 		return getCurrentProjectFolder(project) + File.separator + project.getName() + ".par";
 	}
-
+	
+	public static void showErrorLogView() {
+		try {
+			PdkToolsActivator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.pde.runtime.LogView");
+		} catch (PartInitException e) {
+			PdkToolsLog.logError(e);
+		}
+	}
 }

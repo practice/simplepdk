@@ -1,5 +1,6 @@
 package com.bpnr.portal.devtools;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -12,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 public class SAPMPWizardPage extends WizardPage {
 
 	private ChooseServerComponent serverChooser;
+	private IProject project;
 
 	public SAPMPWizardPage() {
 		super("PAR Deploy");
@@ -53,6 +55,8 @@ public class SAPMPWizardPage extends WizardPage {
 			}
 		});
 		container.setFocus();
+		
+		
 	}
 
 	public ChooseServerComponent getServerConfigSelector() {

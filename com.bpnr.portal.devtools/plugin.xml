@@ -49,6 +49,7 @@
       <wizard
             category="com.bpnr.portal.devtools.exportCategory"
             class="com.bpnr.portal.devtools.ExportParWizard"
+            icon="icons/UploadPar.gif"
             id="com.bpnr.portal.devtools.exportpar"
             name="Export PAR file">
       </wizard>

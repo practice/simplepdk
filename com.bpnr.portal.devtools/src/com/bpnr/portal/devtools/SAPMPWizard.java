@@ -65,10 +65,6 @@ public class SAPMPWizard extends Wizard implements IExportWizard {
 		return null;
 	}
 
-	public void setSelectedProject(IProject project) {
-		this.selectedProject = project;
-	}
-
 	public void addPages() {
 		super.addPages();
 		this.selectProjectPage = new SelectProjectWizardPage("Package a Portal Application into a PAR file", "Package a Portal Application into a PAR file");
@@ -87,9 +83,4 @@ public class SAPMPWizard extends Wizard implements IExportWizard {
 	public void setSAPMPWizardPage(SAPMPWizardPage wp) {
 		this.serversAndDeployPage = wp;
 	}
-
-	public SAPMPWizardPage getSAPMPWizardPage() {
-		return this.serversAndDeployPage;
-	}
-
 }
