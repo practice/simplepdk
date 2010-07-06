@@ -22,6 +22,14 @@ public class SAPMPWizard extends Wizard implements IExportWizard {
 	private PortalServer selectedServer;
 	private ChooseServerComponent chooseServerComponent;
 //	private IWorkbench workbench;
+	
+	public SAPMPWizard() {
+		super();
+	}
+	
+	public SAPMPWizard(IProject selectedProject) {
+		this.selectedProject = selectedProject;
+	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 //		this.workbench = workbench;
@@ -80,7 +88,7 @@ public class SAPMPWizard extends Wizard implements IExportWizard {
 		return "PAR Export";
 	}
 
-	public void setSAPMPWizardPage(SAPMPWizardPage wp) {
-		this.serversAndDeployPage = wp;
-	}
+//	public void setSAPMPWizardPage(SAPMPWizardPage wp) {
+//		this.serversAndDeployPage = wp;
+//	}
 }

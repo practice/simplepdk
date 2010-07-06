@@ -13,7 +13,7 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.bpnr.portal.devtools.QuickPARUploadWizard;
+import com.bpnr.portal.devtools.SAPMPWizard;
 
 /**
  * Our sample action implements workbench action delegate. The action proxy will
@@ -53,7 +53,7 @@ public class UploadParAction implements IWorkbenchWindowActionDelegate {
 			}
 		}
 
-		QuickPARUploadWizard wizard = new QuickPARUploadWizard(this.selectedProject);
+		SAPMPWizard wizard = new SAPMPWizard(this.selectedProject);
 		wizard.init(PlatformUI.getWorkbench(), null);
 		WizardDialog wd = new WizardDialog(window.getShell(), wizard);
 		wd.open();

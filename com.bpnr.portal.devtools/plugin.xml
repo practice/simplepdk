@@ -48,7 +48,7 @@
       </category>
       <wizard
             category="com.bpnr.portal.devtools.exportCategory"
-            class="com.bpnr.portal.devtools.ExportParWizard"
+            class="com.bpnr.portal.devtools.SAPMPWizard"
             icon="icons/UploadPar.gif"
             id="com.bpnr.portal.devtools.exportpar"
             name="Export PAR file">
