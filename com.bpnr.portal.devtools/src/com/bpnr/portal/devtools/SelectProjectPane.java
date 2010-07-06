@@ -56,6 +56,7 @@ public class SelectProjectPane {
 		if (currentProject != null) {
 			StructuredSelection structuredSelection = new StructuredSelection(currentProject);
 			this.tv.setSelection(structuredSelection);
+			tv.reveal(currentProject);
 		}
 	}
 
